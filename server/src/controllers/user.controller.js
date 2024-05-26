@@ -16,10 +16,8 @@ const signup = async (req, res) => {
     user.username = username
     user.setPassword(password)
     user.token = serverClient.createToken(user.id)
-    console.log(user)
 
     await user.save()
-    console.log("hello")
 
     const token = jsonwebtoken.sign(
       { data: user.id },
@@ -45,7 +43,7 @@ const signin = async (req, res) => {
 
     const user = await userModel
       .findOne({ username })
-      .select("username password salt id friendId")
+      .select("username password salt id")
 
     if (!user) return responseHandler.badrequest(res, "Utilisateur introuvable")
 

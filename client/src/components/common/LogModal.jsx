@@ -9,11 +9,13 @@ import { setAuthModalOpen } from "../../redux/features/authModalSlice.js"
 import { setUser } from "../../redux/features/userSlice.js"
 import "../../styles/logpage.css"
 import Modal from "react-modal"
+import Cookies from "universal-cookie"
 
 const LogModal = () => {
   const { authModalOpen } = useSelector((state) => state.authModal)
 
   const dispatch = useDispatch()
+  const cookie = new Cookies()
 
   const [isSignUp, setIsSignUp] = useState(false) // pour le style du formulaire
   const [errorMessage, setErrorMessage] = useState("")
@@ -48,6 +50,8 @@ const LogModal = () => {
       const { response, err } = await userApi.signup(values)
 
       if (response) {
+        const user = JSON.stringify(response)
+        cookie.set("user", user, { path: "/", maxAge: 3600 })
         signUpForm.resetForm()
         dispatch(setUser(response))
         dispatch(setAuthModalOpen(false))
@@ -79,6 +83,8 @@ const LogModal = () => {
 
       if (response) {
         signInForm.resetForm()
+        const user = JSON.stringify(response)
+        cookie.set("user", user, { path: "/", maxAge: 3600 })
         dispatch(setUser(response))
         dispatch(setAuthModalOpen(false))
         toast.success("Vous êtes connecté !")

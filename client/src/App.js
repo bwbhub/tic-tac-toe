@@ -33,7 +33,7 @@ function App() {
         closeOnClick
         pauseOnFocusLoss
       />
-      <MainLayout />
+      <MainLayout client={client} />
     </div>
   )
 }
